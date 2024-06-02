@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidebar Menu for Admin Dashboard | CodingNepal</title>
+    <link rel="stylesheet" th:href="@{/style-company-list.css}" />
+    <!-- Fontawesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+</head>
+<body>
+
+
+<div>
+    <a th:href="@{/courses/add-new-courses}"><h2>Add New </h2></a>
+</div>
+
+<div class="container">
+    <ul class="responsive-table" >
+        <li class="table-header">
+            <div class="col col-1">No</div>
+            <div class="col col-2">Company Name</div>
+            <div class="col col-3">Domain Name</div>
+            <!--            <div class="col col-4">Courses</div>-->
+        </li>
+
+        <li class="table-row" th:each="CoursesObject : ${listOfCourses}">
+            <div class="col col-1" th:text="${CoursesObject.id}"></div>
+            <div class="col col-2" th:text="${CoursesObject.courseName}"></div>
+<!--            <div class="col col-4" th:text="${CoursesObject.webSiteName}"></div>-->
+            <!--            <div class="col col-3" th:text="${companyObject.companyLocation}"></div>-->
+        </li>
+    </ul>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>
