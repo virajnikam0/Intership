@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dash</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container-dashboard {
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .info-button {
+            width: 200px; /* Adjust as needed */
+            height: 200px; /* Adjust as needed */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px; /* Adjust as needed */
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            margin: 10px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .info-button:hover {
+            background-color: #45a049;
+        }
+        .info-button:focus {
+            outline: none; /* Remove focus outline */
+        }
+        .info-button:active {
+            transform: translateY(1px); /* Add a slight vertical shift when button is pressed */
+        }
+        /* Add more styles for responsiveness */
+        @media screen and (max-width: 768px) {
+            .info-button {
+                font-size: 24px;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .info-button {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-dashboard" th:object="${someModelObject}">
+        <div class="section">
+            <button class="info-button" data-link="/company/courses/batch/inHouseBatch/" data-param="${in}">
+                In
+            </button>
+            <button class="info-button" data-link="/company/courses/batch/inHouseBatch/" data-param="${out}">
+                Out
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.info-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const link = button.getAttribute('data-link');
+                    const param = button.getAttribute('data-param');
+                    location.href = `${link}${param}`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
