@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dash</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #009879;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.info-button, .add-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+}
+
+.info-button:hover, .add-button:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+    <div class="add-company-container">
+        <button class="add-button" id="openCompanyModal">Add Company</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Company Name</th>
+                <th>Course Count</th>
+                <th>View Courses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="company : ${companys}">
+                <td>
+                    <button class="add-button openCourseModal" th:attr="data-company-id=${company.id}" th:text="'Add Course'"></button>
+
+                </td>
+                <td th:text="${company.name}"></td>
+                <td th:text="'Courses: ' + ${company.courseCount}"></td>
+                <td>
+                    <button class="info-button" th:text="'View Courses'" th:onclick="|location.href='/company/courses/' + ${company.id}|"></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Company Modal -->
+    <div id="companyModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="#" th:action="@{/company/add}" method="post">
+                <label for="companyName">Company Name:</label><br>
+                <input type="text" id="companyName" name="companyName"><br><br>
+                <input type="submit" value="Add Company">
+            </form>
+        </div>
+    </div>
+
+    <!-- Course Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="courseForm" action="#" method="post">
+                <label for="courseName">Course Name:</label><br>
+                <input type="text" id="courseName" name="courseName"><br><br>
+                <input type="submit" value="Add Course">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get the modals
+        var companyModal = document.getElementById("companyModal");
+        var courseModal = document.getElementById("courseModal");
+
+        // Get the buttons that open the modals
+        var companyBtn = document.getElementById("openCompanyModal");
+        var courseBtns = document.querySelectorAll(".openCourseModal");
+
+        // Get the <span> elements that close the modals
+        var span = document.getElementsByClassName("close");
+
+        // When the user clicks the button, open the company modal
+        companyBtn.onclick = function() {
+            companyModal.style.display = "block";
+        }
+
+        // When the user clicks on a course button, open the course modal with the corresponding company id
+        courseBtns.forEach(function(button) {
+            button.onclick = function() {
+                var companyId = button.getAttribute("data-company-id");
+                document.getElementById("courseForm").action = "/company/course/add/" + companyId;
+                courseModal.style.display = "block";
+            };
+        });
+
+        // When the user clicks on <span> (x), close the modal
+        for (var i = 0; i < span.length; i++) {
+            span[i].onclick = function() {
+                companyModal.style.display = "none";
+                courseModal.style.display = "none";
+            }
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == companyModal || event.target == courseModal) {
+                companyModal.style.display = "none";
+                courseModal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Table with Documents</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #dddddd;
+        }
+        .add-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Table with Documents</h2>
+
+<table id="student-table">
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Adhar Card</th>
+            <th>Income Certificate</th>
+            <th>12th Result</th>
+            <th>10th Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.id}">Student ID</td>
+            <td th:text="${student.name}">Name</td>
+            <td>
+                <a th:if="${student.aadharCard != null}" th:href="@{'/downloadDocument/' + ${student.id} + '/aadharCard'}">View</a>
+                <span th:if="${student.aadharCard == null}">Not Available</span>
+            </td>
+            <td>
+                <a th:if="${student.incomeCertificate != null}" th:href="@{'/downloadDocument/' + ${student.id} + '/incomeCertificate'}">View</a>
+                <span th:if="${student.incomeCertificate == null}">Not Available</span>
+            </td>
+            <td>
+                <a th:if="${student.twelfthResult != null}" th:href="@{'/downloadDocument/' + ${student.id} + '/twelfthResult'}">View</a>
+                <span th:if="${student.twelfthResult == null}">Not Available</span>
+            </td>
+            <td>
+                <a th:if="${student.tenthResult != null}" th:href="@{'/downloadDocument/' + ${student.id} + '/tenthResult'}">View</a>
+                <span th:if="${student.tenthResult == null}">Not Available</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- <a href="/add-student" class="add-button">Add Student Document</a> -->
+
+</body>
+</html>

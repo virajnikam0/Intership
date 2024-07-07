@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #009879;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+        .info-button, .add-button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+        }
+        .info-button {
+            background-color: #4CAF50;
+        }
+        .info-button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+        .add-button {
+            background-color: #ff5722;
+        }
+        .add-button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #ff5722;
+        }
+        /* Ensure the modal is hidden by default */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 5px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Add Batch</th>
+                <th>Course Name</th>
+                <th>Batch Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="course : ${courses}">
+                <td>
+                    <!-- Button to open the modal -->
+                    <button class="add-button" th:attr="data-course-id=${course.id}" onclick="openBatchModal(this)">Add Batch</button>
+                </td>
+                <td>
+                    <button class="info-button" th:onclick="|location.href='/company/courses/batch/' + ${course.id}|">
+                        <span th:text="${course.name}"></span>
+                    </button>
+                </td>
+                <td th:text="${course.batchCount}">Batch Count</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal for adding a batch -->
+    <div id="batchModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBatchModal()">&times;</span>
+            <form action="/company/courses/addBatch" method="post">
+                <label for="batchName">Batch Name:</label><br>
+                <input type="text" id="batchName" name="batchName"><br><br>
+                <input type="radio" id="in" name="batchType" value="in">
+                <label for="in">In</label>
+                <input type="radio" id="out" name="batchType" value="out">
+                <label for="out">Out</label><br><br>
+                <input type="submit" value="Add Batch">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to open the batch modal
+        function openBatchModal(button) {
+            var courseId = button.getAttribute("data-course-id");
+            document.querySelector("#batchModal form").action = "/company/courses/addBatch/" + courseId;
+            // Show the modal
+            document.getElementById("batchModal").style.display = "block";
+        }
+
+        // Function to close the batch modal
+        function closeBatchModal() {
+            document.getElementById("batchModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
